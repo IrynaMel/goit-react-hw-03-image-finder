@@ -20,6 +20,13 @@ class App extends Component{
    loading: false
  }
 
+ componentDidUpdate(prevProps, prevState) {
+  const prevQuery = prevState.query;
+  const nextQuery = this.state.query;
+  if (prevQuery !== nextQuery) {
+    this.getImages();
+    }}
+
 getImages=()=>{
  FetchImages(this.state.query, this.state.page)
   .then((imagesList) => {
@@ -45,7 +52,6 @@ toast.error(`No images for ${this.state.query}`)
   imagesList:[],
   loading: true})
   
- this.getImages()
  }
 
  onLoadMoreClick=()=>{
