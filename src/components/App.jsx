@@ -9,6 +9,7 @@ import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
 import ButtonLoadMore from './Button/Button';
 import LoaderSpinner from './Loader/Loader';
+import Modal from './Modal/Modal';
 
 
 class App extends Component{
@@ -17,7 +18,9 @@ class App extends Component{
    imagesList: [],
    page: 1,
    button: false,
-   loading: false
+   loading: false,
+   showModal: false,
+   modalImage: ''
  }
 
  componentDidUpdate(prevProps, prevState) {
@@ -38,7 +41,8 @@ toast.error(`No images for ${this.state.query}`)
     }else{
       this.setState({button: false})}
     this.setState((prevState)=>(
-      {imagesList: [...prevState.imagesList, ...imagesList]}))})
+      {page: prevState.page + 1,
+        imagesList: [...prevState.imagesList, ...imagesList]}))})
   .catch(error=> console.log(error))
   .finally(() => {
     
@@ -47,35 +51,57 @@ toast.error(`No images for ${this.state.query}`)
 }
 
  handlerFormSubmit = (query)=>{
-  this.setState({query: query,
-    page:1,
+  this.setState({
+    query: query,
+    page: 1,
   imagesList:[],
   loading: true})
   
  }
 
  onLoadMoreClick=()=>{
-  this.setState((prevState)=>({page: prevState.page + 1,
+  this.setState(()=>({
+  
     loading: true}) )
    
  this.getImages()
 
  }
+
+ toggleModal=()=>{
+   this.setState(({showModal})=>({
+     showModal: !showModal
+   }))
+ }
+
+ openModal=(largeImageURL)=>{
+   this.setState({
+     modalImage: largeImageURL
+   })
+   this.toggleModal()
+ }
  
  
   render(){
-    const {imagesList, button, loading}= this.state
+    const {imagesList, button, loading, showModal, modalImage}= this.state
   return (
-    <div>
+     <div>
+      {showModal &&
+       (<Modal
+       onClose={this.toggleModal}>
+        <img src={modalImage}
+        alt ='largeImg'/>
+        </Modal>)
+         }
     <ToastContainer />
     <Searchbar onSubmit={this.handlerFormSubmit}/>
     {imagesList &&(
     <ImageGallery
-     imagesList ={imagesList}/>)}
+     imagesList ={imagesList}
+     modalImage={this.openModal}/>)}
      {loading && <LoaderSpinner />}
      {button && <ButtonLoadMore 
      onClick = {this.onLoadMoreClick}/>}
-     
     </div>
   );
 }
