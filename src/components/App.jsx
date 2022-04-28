@@ -35,6 +35,7 @@ class App extends Component{
 getImages=()=>{
  FetchImages(this.state.query, this.state.page)
   .then((imagesList) => {
+    this.setState({loading: true})
     if(imagesList.length===0){
 toast.error(`No images for ${this.state.query}`)
     }
@@ -57,15 +58,13 @@ toast.error(`No images for ${this.state.query}`)
     query: query,
     page: 1,
   imagesList:[],
-  loading: true})
+  })
   // this.getImages()
   
  }
 
  onLoadMoreClick=()=>{
-  this.setState(()=>({
-  
-    loading: true}) )
+
    
  this.getImages()
 
