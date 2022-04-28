@@ -23,14 +23,14 @@ class App extends Component{
    modalImage: ''
  }
 
-//  componentDidUpdate(prevProps, prevState) {
-//   const prevQuery = prevState.query;
-//   const nextQuery = this.state.query;
-//   if (prevQuery !== nextQuery) {
-//     this.getImages();
-//     }
+ componentDidUpdate(prevProps, prevState) {
+  const prevQuery = prevState.query;
+  const nextQuery = this.state.query;
+  if (prevQuery !== nextQuery) {
+    this.getImages();
+    }
    
-//   }
+  }
 
 getImages=()=>{
  FetchImages(this.state.query, this.state.page)
@@ -58,7 +58,7 @@ toast.error(`No images for ${this.state.query}`)
     page: 1,
   imagesList:[],
   loading: true})
-  this.getImages()
+  // this.getImages()
   
  }
 
